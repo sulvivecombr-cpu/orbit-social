@@ -3,6 +3,10 @@ import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
   devIndicators: false,
+  // Allow the Base44 preview origin to access dev assets/HMR.
+  allowedDevOrigins: process.env.BASE44_PUBLIC_HOST_SUFFIX
+    ? ["3000-" + process.env.BASE44_PUBLIC_HOST_SUFFIX]
+    : [],
   // Pipe remote images through Vercel's image CDN so post media + avatars
   // get edge-cached + resized once, instead of every viewer hitting
   // Supabase storage / Mux thumbnails directly.
