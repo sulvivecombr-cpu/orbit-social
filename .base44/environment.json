@@ -1,0 +1,22 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_URL",
+      "description": "Supabase project URL (Supabase Dashboard → Project Settings → API). Placeholder lets the app boot; real value needed for data/auth to work.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "description": "Supabase anon/public key (Supabase Dashboard → Project Settings → API). Placeholder lets the app boot; real value needed for data/auth to work.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "SUPABASE_SERVICE_ROLE_KEY",
+      "description": "Supabase service-role key, server-only (Supabase Dashboard → Project Settings → API). Placeholder lets the app boot; real value needed for server routes/admin actions.",
+      "requiredAtBoot": false
+    }
+  ]
+}

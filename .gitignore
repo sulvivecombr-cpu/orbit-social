@@ -38,6 +38,7 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 !.env.example
+!.env.base44-defaults
 
 # secrets and credentials
 *.key

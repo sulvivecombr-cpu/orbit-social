@@ -1,0 +1,33 @@
+services:
+  web:
+    image: node:22
+    working_dir: /app
+    restart: on-failure
+    env_file:
+      - ./.env.base44-defaults
+      - /run/base44/app.env
+    environment:
+      - BASE44_PUBLIC_HOST_SUFFIX=${BASE44_PUBLIC_HOST_SUFFIX}
+      - BASE44_SANDBOX_HOST_DOMAIN=${BASE44_SANDBOX_HOST_DOMAIN}
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=${BASE44_PUBLIC_HOST_SUFFIX}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+      - web_node_modules:/app/node_modules
+    command:
+      - sh
+      - -ec
+      - |
+        CI=true npm ci && exec npm run dev -- -H 0.0.0.0 -p 3000
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "curl -fsS http://127.0.0.1:3000/ >/dev/null 2>&1 || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 90s
+
+volumes:
+  web_node_modules:
