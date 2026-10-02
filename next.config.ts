@@ -15,6 +15,13 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
     ],
   },
+  async redirects() {
+    return [
+      // The sign-up page lives at /signup; without this alias /register falls
+      // through to the /[username] profile route and renders "User not found".
+      { source: "/register", destination: "/signup", permanent: false },
+    ];
+  },
   async headers() {
     return [
       {

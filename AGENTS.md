@@ -33,6 +33,19 @@ docker compose -f docker-compose.base44.yml up -d
 - Preview: curl `http://localhost:3000/` returns 200 with the landing page; authed
   routes render their shells (data depends on real Supabase creds).
 
+## Performance quirks
+- `.next` is a named volume (`web_next`), not the bind mount: Turbopack writes a lot
+  there. Don't run `npm run build` inside the dev container — it drops a ~1 GB
+  production build into `.next` next to the dev cache. Run build/typecheck/lint in a
+  throwaway container or accept the cleanup (`docker compose ... down`, then
+  `docker volume rm app_web_next`).
+- With the placeholder Supabase URL every server-side query fails and the Supabase
+  client retries with backoff, so routes that query on the server (e.g. `/[username]`)
+  take ~14 s and client pages sit on loading skeletons. Real Supabase credentials
+  are the actual fix.
+- Sign-up is `/signup`; `/register` is a redirect alias (`next.config.ts`). Without it
+  `/register` is swallowed by the `/[username]` profile route.
+
 ## Notes
 - `next.config.ts` has no `allowedDevOrigins` entry; Next 16 Turbopack dev has not
   blocked the preview origin in practice here. If the preview ever shows a blank
